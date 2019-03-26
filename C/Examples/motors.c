@@ -1,24 +1,3 @@
-/*
- *  https://www.dexterindustries.com/BrickPi/
- *  https://github.com/DexterInd/BrickPi3
- *
- *  Copyright (c) 2017 Dexter Industries
- *  Released under the MIT license (http://choosealicense.com/licenses/mit/).
- *  For more information, see https://github.com/DexterInd/BrickPi3/blob/master/LICENSE.md
- *
- *  This code is an example for reading the encoders of motors connected to the BrickPi3.
- *
- *  Hardware: Connect EV3 or NXT motor(s) to any of the BrickPi3 motor ports.
- *
- *  Results:  When you run this program, you should see the encoder value for each motor. By manually rotating motor A, the other motor(s) will be controlled. Motor B power will be controlled, Motor C speed will be controlled, and motor D position will be controlled.
- *
- *  Example compile command:
- *    g++ -o program "motors.c"
- *  Example run command:
- *    sudo ./program
- *
- */
-
 #include "BrickPi3.cpp" // for BrickPi3
 #include <stdio.h>      // for printf
 #include <unistd.h>     // for usleep
@@ -46,14 +25,14 @@ int main(){
     int32_t EncoderB = BP.get_motor_encoder(PORT_B);
     
     // Use the encoder value from motor A to control motors B, C, and D
-   if(BP.get_sensor(PORT_4, &Touch4)){
-     printf("Touch sensor (S4): pressed %d   ", Touch4.pressed);
+   BP.get_sensor(PORT_4, &Touch4)
+   printf("Touch sensor (S4): pressed %d   ", Touch4.pressed);
     if(Touch4.pressed == 1){
       printf("dit lukt\n");
       BP.set_motor_power(PORT_B, 255);
       BP.set_motor_power(PORT_A, 255);
   }
-   }
+   
     
     // Display the encoder values
     printf("Encoder A: %6d  B: %6d\n", EncoderA, EncoderB);
