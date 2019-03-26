@@ -45,13 +45,15 @@ int main(){
     int32_t EncoderA = BP.get_motor_encoder(PORT_A);
     int32_t EncoderB = BP.get_motor_encoder(PORT_B);
     
-    printf("Touch sensor (S4): pressed %d   ", Touch4.pressed);
     // Use the encoder value from motor A to control motors B, C, and D
-   if(Touch4.pressed == 1){
+   if(BP.get_sensor(PORT_4, &Touch4)){
+    if(Touch4.pressed == 1){
       printf("dit lukt\n");
       BP.set_motor_power(PORT_B, 255);
       BP.set_motor_power(PORT_A, 255);
+      printf("Touch sensor (S4): pressed %d   ", Touch4.pressed);
   }
+   }
     
     // Display the encoder values
     printf("Encoder A: %6d  B: %6d\n", EncoderA, EncoderB);
