@@ -30,8 +30,8 @@ int main(){
    BP.get_sensor(PORT_4, &Touch4);
    printf("Touch sensor (S4): pressed %d   ", Touch4.pressed);
     if(Touch4.pressed == 1){
-      cout << BP.set_motor_power(PORT_B, 10) << "\n";
-      cout << BP.set_motor_power(PORT_A, -10) << "\n";
+      cout << BP.set_motor_power(PORT_B, 40) << "\n";
+      cout << BP.set_motor_power(PORT_A, 20) << "\n";
   }
    
     
