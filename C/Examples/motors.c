@@ -29,8 +29,8 @@ int main(){
    printf("Touch sensor (S4): pressed %d   ", Touch4.pressed);
     if(Touch4.pressed == 1){
       printf("dit lukt\n");
-      BP.set_motor_power(PORT_B, 255);
-      BP.set_motor_power(PORT_A, 255);
+      printf(BP.set_motor_power(PORT_B, 255));
+      printf(BP.set_motor_power(PORT_A, 255));
   }
    
     
