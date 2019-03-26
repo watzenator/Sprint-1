@@ -3,6 +3,7 @@
 #include <unistd.h>     // for usleep
 #include <signal.h>     // for catching exit signals
 #include <iostream>
+using namespace std;
 
 BrickPi3 BP;
 
