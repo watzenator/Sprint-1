@@ -26,7 +26,7 @@ int main(){
     // Read the encoders
     int32_t EncoderA = BP.get_motor_encoder(PORT_A);
     int32_t EncoderB = BP.get_motor_encoder(PORT_B);
-    motorpowers++;
+
     cout << int(motorpowers) << "\n";
     // Use the encoder value from motor A to control motors B, C, and D
    BP.get_sensor(PORT_4, &Touch4);
@@ -35,6 +35,7 @@ int main(){
       printf("dit lukt\n");
       cout << BP.set_motor_power(PORT_B, motorpowers) << "\n";
       cout << BP.set_motor_power(PORT_A, motorpowers) << "\n";
+      motorpowers++;
   }
    
     
