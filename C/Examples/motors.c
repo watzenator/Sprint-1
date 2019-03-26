@@ -36,20 +36,21 @@ int main(){
   // Reset the encoders
   BP.offset_motor_encoder(PORT_A, BP.get_motor_encoder(PORT_A));
   BP.offset_motor_encoder(PORT_B, BP.get_motor_encoder(PORT_B));
-  BP.offset_motor_encoder(PORT_C, BP.get_motor_encoder(PORT_C));
-  BP.offset_motor_encoder(PORT_D, BP.get_motor_encoder(PORT_D));
+  BP.set_sensor_type(PORT_4, SENSOR_TYPE_TOUCH);
+  
+  sensor_touch_t Touch4;
   
   while(true){
     // Read the encoders
     int32_t EncoderA = BP.get_motor_encoder(PORT_A);
     int32_t EncoderB = BP.get_motor_encoder(PORT_B);
-    int32_t EncoderC = BP.get_motor_encoder(PORT_C);
-    int32_t EncoderD = BP.get_motor_encoder(PORT_D);
+    
     
     // Use the encoder value from motor A to control motors B, C, and D
-    BP.set_motor_power(PORT_B, EncoderA < 100 ? EncoderA > -100 ? EncoderA : -100 : 100);
-    BP.set_motor_dps(PORT_C, EncoderA);
-    BP.set_motor_position(PORT_D, EncoderA);
+   if(Touch4.pressed == 1){
+      BP.set_motor_power(PORT_B, 255);
+      BP.set_motor_power(PORT_A, 255);
+  }
     
     // Display the encoder values
     printf("Encoder A: %6d  B: %6d  C: %6d  D: %6d\n", EncoderA, EncoderB, EncoderC, EncoderD);
