@@ -25,7 +25,7 @@ int main(){
     int32_t EncoderB = BP.get_motor_encoder(PORT_B);
     
     // Use the encoder value from motor A to control motors B, C, and D
-   BP.get_sensor(PORT_4, &Touch4)
+   BP.get_sensor(PORT_4, &Touch4);
    printf("Touch sensor (S4): pressed %d   ", Touch4.pressed);
     if(Touch4.pressed == 1){
       printf("dit lukt\n");
