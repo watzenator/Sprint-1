@@ -48,12 +48,15 @@ int main(){
     
     // Use the encoder value from motor A to control motors B, C, and D
    if(Touch4.pressed == 1){
+      printf("dit lukt\n");
       BP.set_motor_power(PORT_B, 255);
       BP.set_motor_power(PORT_A, 255);
   }
     
     // Display the encoder values
     printf("Encoder A: %6d  B: %6d\n", EncoderA, EncoderB);
+    
+    printf(Touch4.pressed);
     
     // Delay for 20ms
     usleep(20000);
