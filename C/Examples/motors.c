@@ -53,7 +53,7 @@ int main(){
   }
     
     // Display the encoder values
-    printf("Encoder A: %6d  B: %6d  C: %6d  D: %6d\n", EncoderA, EncoderB, EncoderC, EncoderD);
+    printf("Encoder A: %6d  B: %6d\n", EncoderA, EncoderB);
     
     // Delay for 20ms
     usleep(20000);
