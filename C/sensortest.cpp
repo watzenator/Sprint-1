@@ -29,7 +29,7 @@ int main(){
     
     if(BP.get_sensor(PORT_1, &Color1)){
       error++;
-    }else if((Color1.reflected_red < 350) &&(Color1.reflected_green < 350) && (Color1.reflected_blue < 350)){
+    }else if((Color1.reflected_red < 400) &&(Color1.reflected_green < 350) && (Color1.reflected_blue < 350)){
 		printf("Zwarte lijn bij rgb     ");
 	}else{
 		printf("Wit bij rgb     ");
