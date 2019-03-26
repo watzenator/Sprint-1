@@ -31,8 +31,8 @@ int main(){
    printf("Touch sensor (S4): pressed %d   ", Touch4.pressed);
     if(Touch4.pressed == 1){
       printf("dit lukt\n");
-      cout << BP.set_motor_power(PORT_B, 255) << "\n";
-      cout << BP.set_motor_power(PORT_A, 255) << "\n";
+      cout << BP.set_motor_power(PORT_B, 100) << "\n";
+      cout << BP.set_motor_power(PORT_A, 100) << "\n";
   }
    
     
