@@ -27,6 +27,7 @@ int main(){
     int32_t EncoderA = BP.get_motor_encoder(PORT_A);
     int32_t EncoderB = BP.get_motor_encoder(PORT_B);
     motorpowers++;
+    cout << motorpowers << "\n";
     // Use the encoder value from motor A to control motors B, C, and D
    BP.get_sensor(PORT_4, &Touch4);
    printf("Touch sensor (S4): pressed %d   ", Touch4.pressed);
@@ -42,7 +43,7 @@ int main(){
     
     
     // Delay for 20ms
-    usleep(20000);
+    usleep(200000);
   }
 }
 
