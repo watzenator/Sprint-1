@@ -56,7 +56,6 @@ int main(){
     // Display the encoder values
     printf("Encoder A: %6d  B: %6d\n", EncoderA, EncoderB);
     
-    printf(Touch4.pressed);
     
     // Delay for 20ms
     usleep(20000);
