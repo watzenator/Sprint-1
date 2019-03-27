@@ -85,7 +85,7 @@ int main(){
 		}else if(sensorLeft == 0 && sensorRight == 0){
 			brake();
 		}else{
-			forward(speedLeft, speedRight);
+			forward(speedLeft, speedRight, motorspeed);
 		}
 		
 	}
