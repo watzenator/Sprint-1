@@ -34,7 +34,7 @@ void brake(){
 
 void objects(int getal){
 		BP.set_motor_power(PORT_B, ((getal - 10) * 2));
-		BP.set_motor_power(PORT_A, ((getal - 10) * 2));
+		BP.set_motor_power(PORT_C, ((getal - 10) * 2));
 }
 
 int main(){
@@ -56,16 +56,16 @@ int main(){
 	sensor_light_t Light3;
 	sensor_touch_t Touch4;
 
-	int8_t motorspeed = 30;
+	int8_t motorspeed = 100;
 	int8_t speedLeft = motorspeed;
 	int8_t speedRight = motorspeed;
 	
-	bool sensorLeft = false;
-	bool sensorRight = false;
+	bool sensorLeft = true;
+	bool sensorRight = true;
 	
 	while(true){
 		// Read the encoders
-		int32_t EncoderA = BP.get_motor_encoder(PORT_A);
+		int32_t EncoderC = BP.get_motor_encoder(PORT_C);
 		int32_t EncoderB = BP.get_motor_encoder(PORT_B);
 
 		BP.get_sensor(PORT_1, &Color1);
