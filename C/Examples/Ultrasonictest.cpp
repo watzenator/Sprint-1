@@ -30,9 +30,9 @@ void brake(){
 }
 
 
-void object(int& Ultrasonic2){
-		BP.set_motor_power(PORT_B, ((Ultrasonic2.cm - 10) * 2));
-		BP.set_motor_power(PORT_A, ((Ultrasonic2.cm - 10) * 2));
+void objects(int& getal){
+		BP.set_motor_power(PORT_B, ((getal - 10) * 2));
+		BP.set_motor_power(PORT_A, ((getal - 10) * 2));
 }
 
 int main(){
@@ -73,7 +73,7 @@ int main(){
 		
 		
 		if(Ultrasonic2.cm < 60){
-			object(Ultrasonic2);
+			objects(Ultrasonic2.cm);
 		}else if(sensorLeft == 1 && sensorRight == 1){
 			forward(speedLeft, speedRight);
 		}else if(sensorLeft == 1 && sensorRight ==0){
