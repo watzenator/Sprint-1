@@ -65,7 +65,7 @@ int main(){
 	
 	while(true){
 		// Read the encoders
-		int32_t EncoderA = BP.get_motor_encoder(PORT_A);
+		int32_t EncoderC = BP.get_motor_encoder(PORT_C);
 		int32_t EncoderB = BP.get_motor_encoder(PORT_B);
 
 		BP.get_sensor(PORT_1, &Color1);
