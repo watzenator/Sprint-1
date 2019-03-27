@@ -47,7 +47,7 @@ int main(){
 			index = 0;
 			firstRun = false;
 		}
-		sleep(1);
+		nanosleep((const struct timespec[]){{0, 100000000L}}, NULL);
 	}
 }
 
