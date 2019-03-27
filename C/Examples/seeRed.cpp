@@ -51,20 +51,22 @@ int main(){
 		cirBuffer[index][2] = Color1.reflected_green;
 		cirBuffer[index][3] = Color1.reflected_blue;
 		cirBuffer[index][4] = Color1.ambient;
-		int sum = 0;
-		float variance = 0.0;
 		if(not firstRun){
-			for(int i = 0; i < 10; i++){
-				sum += cirBuffer[i][1];
+			for(int y = 0; j < 5; j++){
+				int sum = 0;
+				float variance = 0.0;
+				for(int i = 0; i < 10; i++){
+					sum += cirBuffer[i][j];
+					}
+				float avg[j] = (float)sum[j]/10;
+				//std::cout << "Avg: " << avg << std::endl;
+				for(int i = 0; i < 10; i++){
+					variance += std::pow(cirBuffer[i][j] - avg, 2);
 				}
-			float avg = (float)sum/10;
-			//std::cout << "Avg: " << avg << std::endl;
-			for(int i = 0; i < 10; i++){
-				variance += std::pow(cirBuffer[i][1] - avg, 2);
+				variance = variance/10;
+				float stdDiv = std::sqrt(variance);
+				std::cout << "stdDiv" << j << ": " << stdDiv << std::endl;
 			}
-			variance = variance/10;
-			float stdDiv = std::sqrt(variance);
-			std::cout << "stdDiv: " << stdDiv << std::endl;
 		}
 		if(index < 9) {index++;}
 		else {index = 0; firstRun = false;}
