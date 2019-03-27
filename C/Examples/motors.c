@@ -28,7 +28,7 @@ int main(){
 	sensor_light_t Light3;
 	sensor_touch_t Touch4;
 
-	int8_t motorspeed = 50;
+	int8_t motorspeed = 20;
 
 	while(true){
 		// Read the encoders
