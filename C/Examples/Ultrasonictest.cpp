@@ -34,7 +34,7 @@ void brake(){
 
 void objects(int getal){
 		BP.set_motor_power(PORT_B, ((getal - 10) * 2));
-		BP.set_motor_power(PORT_A, ((getal - 10) * 2));
+		BP.set_motor_power(PORT_C, ((getal - 10) * 2));
 }
 
 int main(){
@@ -60,8 +60,8 @@ int main(){
 	int8_t speedLeft = motorspeed;
 	int8_t speedRight = motorspeed;
 	
-	bool sensorLeft = false;
-	bool sensorRight = false;
+	bool sensorLeft = true;
+	bool sensorRight = true;
 	
 	while(true){
 		// Read the encoders
