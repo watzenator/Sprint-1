@@ -3,6 +3,7 @@
 #include <unistd.h>     // for usleep
 #include <signal.h>     // for catching exit signals
 
+
 BrickPi3 BP;
 
 void exit_signal_handler(int signo);
