@@ -56,6 +56,7 @@ int main(){
 		cirBuffer[index][3] = Color1.reflected_blue;
 		cirBuffer[index][4] = Color1.ambient;
 		if(not firstRun){
+			int stdDivAvg = 0;
 			for(int y = 0; j < 5; j++){
 				int sum = 0;
 				float variance = 0.0;
@@ -69,8 +70,11 @@ int main(){
 				}
 				variance = variance/10;
 				float stdDiv = std::sqrt(variance);
+				stdDivAvg += stdDiv;
 				std::cout << "stdDiv" << j << ": " << stdDiv << std::endl;
 			}
+			stdDivAvg /= 5;
+			std::cout << stdDivAvg << "\n";
 		}
 		if(index < 9) {index++;}
 		else {index = 0; firstRun = false;}
