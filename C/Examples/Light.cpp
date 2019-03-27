@@ -38,7 +38,7 @@ int main(){
 			}
 			variance /= 10;
 			float deviation = std::sqrt(variance);
-      std::cout << "Deviation: " << deviation << std::endl;
+      			std::cout << "Deviation: " << deviation << std::endl;
 			
 		}
 		if(index < 9){
