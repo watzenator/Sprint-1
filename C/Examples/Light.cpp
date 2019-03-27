@@ -18,7 +18,7 @@ int main(){
 
 	sensor_light_t      Light3;
 
-	int16_t lightBuffer[10]
+	int16_t lightBuffer[10];
 	int index = 0;
 	bool firstRun = true;
 	while(true){
@@ -34,11 +34,11 @@ int main(){
 			}
 			float average = sum/10;
 			for(int j = 0; j < 10; j++){
-				variance += std::pow(lightBuffer[i] - avg, 2);
+				variance += std::pow(lightBuffer[i] - average, 2);
 			}
 			variance /= 10;
 			float deviation = std::sqrt(variance);
-      std::cout << "Deviation: " << deviation << std::endl;
+      			std::cout << "Deviation: " << deviation << std::endl;
 			
 		}
 		if(index < 9){
