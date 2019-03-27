@@ -42,7 +42,7 @@ int main(){
 	BP.set_sensor_type(PORT_1, SENSOR_TYPE_NXT_COLOR_FULL);
 
 	sensor_color_t      Color1;
-	int16_t cirBuffer[10][5];
+	int16_t cirBuffer[10][4];
 	int index = 0;
 	bool firstRun = true;
 	bool seeBlack = false;
@@ -50,14 +50,13 @@ int main(){
 		BP.get_sensor(PORT_1, &Color1);
 		//printf("Color sensor (S1): detected %d red %4d green %4d blue %4d ambient %4d", Color1.color, Color1.reflected_red, Color1.reflected_green, Color1.reflected_blue, Color1.ambient);
 		//printf("\n");
-		cirBuffer[index][0] = Color1.color;
-		cirBuffer[index][1] = Color1.reflected_red;
-		cirBuffer[index][2] = Color1.reflected_green;
-		cirBuffer[index][3] = Color1.reflected_blue;
-		cirBuffer[index][4] = Color1.ambient;
+		cirBuffer[index][0] = Color1.reflected_red;
+		cirBuffer[index][1] = Color1.reflected_green;
+		cirBuffer[index][2] = Color1.reflected_blue;
+		cirBuffer[index][3] = Color1.ambient;
 		if(not firstRun){
 			int stdDivAvg = 0;
-			for(int j = 0; j < 5; j++){
+			for(int j = 0; j < 4; j++){
 				int sum = 0;
 				float variance = 0.0;
 				for(int i = 0; i < 10; i++){
@@ -73,7 +72,7 @@ int main(){
 				stdDivAvg += stdDiv;
 				std::cout << "stdDiv" << j << ": " << stdDiv << std::endl;
 			}
-			stdDivAvg /= 5;
+			stdDivAvg /= 4;
 			std::cout << stdDivAvg << "\n";
 		}
 		if(index < 9) {index++;}
