@@ -57,7 +57,7 @@ int main(){
 		cirBuffer[index][4] = Color1.ambient;
 		if(not firstRun){
 			int stdDivAvg = 0;
-			for(int i = 0; j < 5; j++){
+			for(int j = 0; j < 5; j++){
 				int sum = 0;
 				float variance = 0.0;
 				for(int i = 0; i < 10; i++){
