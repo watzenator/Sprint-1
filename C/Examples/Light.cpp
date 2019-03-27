@@ -14,9 +14,9 @@ int main(){
 
 	BP.detect(); // Make sure that the BrickPi3 is communicating and that the firmware is compatible with the drivers.
 
-	BP.set_sensor_type(PORT_1, SENSOR_TYPE_NXT_COLOR_FULL);
+	BP.set_sensor_type(PORT_3, SENSOR_TYPE_NXT_LIGHT_ON);
 
-	sensor_color_t      Color1;
+	sensor_light_t      Light3;
 
 	int16_t lightBuffer[10]
 	int index = 0;
