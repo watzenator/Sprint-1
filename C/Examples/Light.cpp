@@ -18,7 +18,7 @@ int main(){
 
 	sensor_color_t      Color1;
 
-	vector<float> lightBuffer[10]
+	int16_t lightBuffer[10]
 	int index = 0;
 	bool firstRun = true;
 	while(true){
