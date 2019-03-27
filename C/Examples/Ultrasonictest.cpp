@@ -7,19 +7,19 @@ using namespace std;
 
 BrickPi3 BP;
 
-void forward(int8_t& speedL, int8_t& speedR){
+void forward(int8_t& speedL, int8_t& speedR, int8_t& motorspeed){
 	BP.set_motor_power(PORT_C, motorspeed);
 	BP.set_motor_power(PORT_B, motorspeed);
 	speedL = motorspeed;
 	speedR = motorspeed;
 }
 
-void left(int8_t& speed){
+void left(int8_t& speed, int8_t& motorspeed){
 	BP.set_motor_power(PORT_C, speed--);
 	BP.set_motor_power(PORT_B, motorspeed);
 }
 
-void right(int8_t& speed){
+void right(int8_t& speed, int8_t& motorspeed){
 	BP.set_motor_power(PORT_C, motorspeed);
 	BP.set_motor_power(PORT_B, speed--);
 }
@@ -75,11 +75,11 @@ int main(){
 		if(Ultrasonic2.cm < 60){
 			objects(Ultrasonic2.cm);
 		}else if(sensorLeft == 1 && sensorRight == 1){
-			forward(speedLeft, speedRight);
+			forward(speedLeft, speedRight, motorspeed);
 		}else if(sensorLeft == 1 && sensorRight ==0){
-			right(speedLeft);
+			right(speedLeft, motorspeed);
 		}else if(sensorLeft == 0 && sensorRight == 1){
-			left(speedRight);
+			left(speedRight, motorspeed);
 		}else if(sensorLeft == 0 && sensorRight == 0){
 			brake();
 		}else{
