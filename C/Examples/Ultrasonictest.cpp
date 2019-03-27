@@ -7,6 +7,8 @@ using namespace std;
 
 BrickPi3 BP;
 
+void exit_signal_handler(int signo);
+
 void forward(int8_t& speedL, int8_t& speedR, int8_t& motorspeed){
 	BP.set_motor_power(PORT_C, motorspeed);
 	BP.set_motor_power(PORT_B, motorspeed);
@@ -30,7 +32,7 @@ void brake(){
 }
 
 
-void objects(int& getal){
+void objects(int getal){
 		BP.set_motor_power(PORT_B, ((getal - 10) * 2));
 		BP.set_motor_power(PORT_A, ((getal - 10) * 2));
 }
