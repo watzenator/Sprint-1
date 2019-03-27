@@ -62,7 +62,7 @@ int main(){
 
 		printf("Ultrasonic sensor (S2): CM %5.1f Inches %5.1f   ", Ultrasonic2.cm, Ultrasonic2.inch);
 		if(Ultrasonic2.cm < 60){
-			BP.set_motor_power(PORT_B, ((Ultrasonic2.cm - 10) * 2);
+			BP.set_motor_power(PORT_B, ((Ultrasonic2.cm - 10) * 2));
 			BP.set_motor_power(PORT_A, ((Ultrasonic2.cm - 10) * 2));
 		}
 
