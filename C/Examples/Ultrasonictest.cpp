@@ -56,7 +56,7 @@ int main(){
 	sensor_light_t Light3;
 	sensor_touch_t Touch4;
 
-	int8_t motorspeed = 30;
+	int8_t motorspeed = 100;
 	int8_t speedLeft = motorspeed;
 	int8_t speedRight = motorspeed;
 	
