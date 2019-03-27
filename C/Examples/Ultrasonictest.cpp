@@ -43,8 +43,8 @@ int main(){
 	BP.detect(); // Make sure that the BrickPi3 is communicating and that the firmware is compatible with the drivers.
   
 	// Reset the encoders
-	BP.offset_motor_encoder(PORT_C, BP.get_motor_encoder(PORT_C));
-	BP.offset_motor_encoder(PORT_B, BP.get_motor_encoder(PORT_B));
+	int32_t EncoderC = BP.offset_motor_encoder(PORT_C, BP.get_motor_encoder(PORT_C));
+	int32_t EncoderB = BP.offset_motor_encoder(PORT_B, BP.get_motor_encoder(PORT_B));
 	
 	BP.set_sensor_type(PORT_1, SENSOR_TYPE_NXT_COLOR_FULL);
 	BP.set_sensor_type(PORT_2, SENSOR_TYPE_NXT_ULTRASONIC);
@@ -88,6 +88,7 @@ int main(){
 			forward(speedLeft, speedRight, motorspeed);
 		}
 		
+		printf("Encoder C: %6d  B: %6d\n", EncoderC, EncoderB);
 	}
 	
 }
