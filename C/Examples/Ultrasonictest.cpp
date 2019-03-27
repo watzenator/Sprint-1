@@ -5,6 +5,8 @@
 #include <iostream>
 using namespace std;
 
+BrickPi3 BP;
+
 void forward(int8_t& speedL, int8_t& speedR){
 	BP.set_motor_power(PORT_C, motorspeed);
 	BP.set_motor_power(PORT_B, motorspeed);
@@ -28,7 +30,7 @@ void brake(){
 }
 
 
-void object(){
+void object(int& Ultrasonic2){
 		BP.set_motor_power(PORT_B, ((Ultrasonic2.cm - 10) * 2));
 		BP.set_motor_power(PORT_A, ((Ultrasonic2.cm - 10) * 2));
 }
@@ -55,7 +57,10 @@ int main(){
 	int8_t motorspeed = 30;
 	int8_t speedLeft = motorspeed;
 	int8_t speedRight = motorspeed;
-
+	
+	bool sensorLeft = false;
+	bool sensorRight = false;
+	
 	while(true){
 		// Read the encoders
 		int32_t EncoderA = BP.get_motor_encoder(PORT_A);
@@ -68,13 +73,13 @@ int main(){
 		
 		
 		if(Ultrasonic2.cm < 60){
-			object();
+			object(Ultrasonic2);
 		}else if(sensorLeft == 1 && sensorRight == 1){
 			forward(speedLeft, speedRight);
 		}else if(sensorLeft == 1 && sensorRight ==0){
 			right(speedLeft);
 		}else if(sensorLeft == 0 && sensorRight == 1){
-			left(speefRight);
+			left(speedRight);
 		}else if(sensorLeft == 0 && sensorRight == 0){
 			brake();
 		}else{
@@ -83,4 +88,12 @@ int main(){
 		
 	}
 	
+}
+
+// Signal handler that will be called when Ctrl+C is pressed to stop the program
+void exit_signal_handler(int signo){
+	if(signo == SIGINT){
+		BP.reset_all();    // Reset everything so there are no run-away motors
+		exit(-2);
+	}
 }
