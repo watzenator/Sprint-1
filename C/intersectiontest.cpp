@@ -3,9 +3,45 @@
 #include <unistd.h>     // for usleep
 #include <signal.h>     // for catching exit signals
 #include <iostream>
+
+#define MAX_MOTORPOWER 100
+#define MIN_MOTORPOWER -100
+
 using namespace std;
 
 BrickPi3 BP;
+
+struct pid{
+	double pBias = 0, iBias = 0, dBias = 0;
+	double pGain = 1, iGain = 1, dGain = 1;
+	double iState = 0, dState = 0;
+	double iLimit = 0.25, dLimit = 0.25;
+	double iMax = 100, iMin = -100;
+}
+
+double PIDconfig(pid & Pid){
+	double Pid.iMax = pid.iLimit * MAX_MOTORPOWER / pid.iGain;
+	double Pid.iMin = pid.iLimit * MIN_MOTORPOWER / pid.iGain;
+}
+
+double PIDcontrol(pid & Pid, double setting, double error){
+	//P part
+	double pOutput = (error + Pid.pBias) * Pid.pGain;
+	
+	//I part
+	Pid.iState += (error + Pid.iBias);
+	if(Pid.iState > Pid.iMax){
+		Pid.iState = Pid.iMax;
+	}
+	else if(Pid.iState < Pid.iMin){
+		Pid.iState = Pid.iMin;
+	}
+	double iOutput = Pid.iState * Pid.iGain;
+	
+	//D part
+	double dOutput = ;
+}
+
 
 bool voltageIsSafe(){
 	printf("Battery voltage : %.3f\n", BP.get_voltage_battery());
