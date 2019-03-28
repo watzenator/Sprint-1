@@ -63,6 +63,7 @@ int main(){
 	sensor_touch_t Touch4;
 
 	int8_t motorspeed = 25;
+
 	int8_t speedLeft = motorspeed;
 	int8_t speedRight = motorspeed;
 	
@@ -79,13 +80,15 @@ int main(){
 		BP.get_sensor(PORT_2, &Ultrasonic2);
 		BP.get_sensor(PORT_3, &Light3);
 		BP.get_sensor(PORT_4, &Touch4);
-		
+    
 		if(Color1.reflected_red < 500){
+
 			sensorLeft = false;
 		}else{
 			sensorLeft = true;
 		}
 		
+
 		if(Light3.reflected > 2000 ){
 			sensorRight = false;
 		}else{
