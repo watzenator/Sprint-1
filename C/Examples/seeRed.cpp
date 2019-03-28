@@ -62,7 +62,7 @@ int main(){
 				for(int i = 0; i < 10; i++){
 					sum += cirBuffer[i][j];
 					}
-				float avg[j] = (float)sum[j]/10;
+				float avg = (float)sum/10;
 				//std::cout << "Avg: " << avg << std::endl;
 				for(int i = 0; i < 10; i++){
 					variance += std::pow(cirBuffer[i][j] - avg, 2);
@@ -77,7 +77,7 @@ int main(){
 		}
 		if(index < 9) {index++;}
 		else {index = 0; firstRun = false;}
-		nanosleep((const struct timespec[]){{0, 100000000L}}, NULL);
+		nanosleep((const struct timespec[]){{0, 900000000L}}, NULL);
 	}
 }
 
