@@ -62,6 +62,7 @@ int main(){
 	
 	bool sensorLeft = false;
 	bool sensorRight = false;
+	bool sensorTouch = false;
 	
 	while(true){
 		// Read the encoders
@@ -85,7 +86,15 @@ int main(){
 			sensorRight = true;
 		}
 		
-		if(Ultrasonic2.cm < 60){
+		if(Touch4.pressed == 1){
+			sensorTouch = true;
+		}else{
+			sensorTouch = false;
+		}
+		
+		if(sensorTouch == 1){
+			brake();
+		}else if(Ultrasonic2.cm < 30){
 			objects(Ultrasonic2.cm);
 		}else if(sensorLeft == 1 && sensorRight == 1){
 			forward(speedLeft, speedRight, motorspeed);
