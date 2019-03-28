@@ -37,7 +37,7 @@ void brake(){
 	BP.set_motor_power(PORT_B, 0);
 }
 
-void intersection(int8_t& motorspeed){
+void intersection(int8_t& motorspeed, bool& sensorLeft, bool& sensorRight){
 	BP.set_motor_power(PORT_C, 0);
 	BP.set_motor_power(PORT_B, 0);
 	string keuze = "";
@@ -155,7 +155,7 @@ int main(){
 		}else if(sensorLeft == 0 && sensorRight == 1){
 			left(speedRight, motorspeed);
 		}else if(sensorLeft == 0 && sensorRight == 0){
-			intersection();
+			intersection(motorspeed, sensorLeft, sensorRight);
 		}else{
 			forward(speedLeft, speedRight, motorspeed);
 		}
