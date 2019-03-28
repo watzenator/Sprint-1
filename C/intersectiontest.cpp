@@ -75,7 +75,8 @@ void intersection(int8_t& motorspeed, bool& sensorLeft, bool& sensorRight){
 	}else if(keuze == "rechtdoor"){
 		while(true){
 			while(sensorRight == 1 && sensorLeft == 1){
-				forward();
+				BP.set_motor_power(PORT_C, motorspeed);
+				BP.set_motor_power(PORT_B, motorspeed);
 			}
 			if(sensorRight== 0 && sensorLeft == 0){
 				break;
