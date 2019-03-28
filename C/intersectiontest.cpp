@@ -49,12 +49,15 @@ void intersection(int8_t& motorspeed, bool& sensorLeft, bool& sensorRight){
 			while(sensorRight == 1){
 				BP.set_motor_power(PORT_C, 0);
 				BP.set_motor_power(PORT_B, motorspeed);
+				sleep(1);
 			}while(sensorRight == 0){
 				BP.set_motor_power(PORT_C, 0);
 				BP.set_motor_power(PORT_B, motorspeed);
+				sleep(1);
 			}while(sensorRight == 1){
 				BP.set_motor_power(PORT_C, 0);
 				BP.set_motor_power(PORT_B, motorspeed);
+				sleep(1);
 			}
 			break;
 		}
@@ -63,12 +66,15 @@ void intersection(int8_t& motorspeed, bool& sensorLeft, bool& sensorRight){
 			while(sensorLeft == 1){
 				BP.set_motor_power(PORT_C, motorspeed);
 				BP.set_motor_power(PORT_B, 0);
+				sleep(1);
 			}while(sensorLeft == 0){
 				BP.set_motor_power(PORT_C, motorspeed);
 				BP.set_motor_power(PORT_B, 0);
+				sleep(1);
 			}while(sensorLeft == 1){
 				BP.set_motor_power(PORT_C, motorspeed);
 				BP.set_motor_power(PORT_B, 0);
+				sleep(1);
 			}
 			break;
 		}
@@ -77,6 +83,7 @@ void intersection(int8_t& motorspeed, bool& sensorLeft, bool& sensorRight){
 			while(sensorRight == 1 && sensorLeft == 1){
 				BP.set_motor_power(PORT_C, motorspeed);
 				BP.set_motor_power(PORT_B, motorspeed);
+				sleep(1);
 			}
 			if(sensorRight== 0 && sensorLeft == 0){
 				break;
