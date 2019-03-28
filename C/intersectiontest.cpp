@@ -7,6 +7,18 @@ using namespace std;
 
 BrickPi3 BP;
 
+bool voltageIsSafe(){
+	printf("Battery voltage : %.3f\n", BP.get_voltage_battery());
+  	printf("9v voltage      : %.3f\n", BP.get_voltage_9v());
+  	printf("5v voltage      : %.3f\n", BP.get_voltage_5v());
+  	printf("3.3v voltage    : %.3f\n", BP.get_voltage_3v3());
+	
+	if(BP.get_voltage_battery() < 10.9){
+		return false;
+	}
+	return true;
+}
+
 void exit_signal_handler(int signo);
 
 void forward(int8_t& speedL, int8_t& speedR, int8_t& motorspeed){
@@ -90,11 +102,19 @@ void objects(int getal){
 		BP.set_motor_power(PORT_C, ((getal - 50) * 2));
 }
 
-int main(){
+int main(){	
+	
 	signal(SIGINT, exit_signal_handler); // register the exit function for Ctrl+C
  
 	BP.detect(); // Make sure that the BrickPi3 is communicating and that the firmware is compatible with the drivers.
-  
+	
+	if(!voltageIsSafe){
+		cout << "Battery almost empty, exiting program..." << endl;
+		BP.reset_all();
+		exit(-5);
+	}
+	
+	
 	// Reset the encoders
 	int32_t EncoderC = BP.offset_motor_encoder(PORT_C, BP.get_motor_encoder(PORT_C));
 	int32_t EncoderB = BP.offset_motor_encoder(PORT_B, BP.get_motor_encoder(PORT_B));
