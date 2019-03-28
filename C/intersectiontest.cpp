@@ -106,12 +106,12 @@ int main(){
 	int32_t EncoderC = BP.offset_motor_encoder(PORT_C, BP.get_motor_encoder(PORT_C));
 	int32_t EncoderB = BP.offset_motor_encoder(PORT_B, BP.get_motor_encoder(PORT_B));
 	
-	BP.set_sensor_type(PORT_1, SENSOR_TYPE_NXT_COLOR_FULL);
+	BP.set_sensor_type(PORT_1, SENSOR_TYPE_NXT_LIGHT_ON);
 	BP.set_sensor_type(PORT_2, SENSOR_TYPE_NXT_ULTRASONIC);
 	BP.set_sensor_type(PORT_3, SENSOR_TYPE_NXT_LIGHT_ON);
 	BP.set_sensor_type(PORT_4, SENSOR_TYPE_TOUCH);
 
-	sensor_color_t Color1;
+	sensor_light_t Color1;//verander dit
 	sensor_ultrasonic_t Ultrasonic2;
 	sensor_light_t Light3;
 	sensor_touch_t Touch4;
@@ -134,7 +134,7 @@ int main(){
 		BP.get_sensor(PORT_3, &Light3);
 		BP.get_sensor(PORT_4, &Touch4);
 		
-		if(Color1.reflected_red < 500){
+		if(Color1.reflected < 2000){
 			sensorLeft = false;
 		}else{
 			sensorLeft = true;
@@ -168,7 +168,7 @@ int main(){
 			forward(speedLeft, speedRight, motorspeed);
 		}
 		
-		printf("Encoder C: %6d  B: %6d Red: %6d\n", EncoderC, EncoderB, Color1.reflected_red);
+		printf("Encoder C: %6d  B: %6d Red: %6d\n", EncoderC, EncoderB, Color1.reflected);
 	}
 	
 }
