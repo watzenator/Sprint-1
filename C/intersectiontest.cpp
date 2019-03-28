@@ -168,7 +168,7 @@ int main(){
 			forward(speedLeft, speedRight, motorspeed);
 		}
 		
-		printf("Encoder C: %6d  B: %6d Red: %6d\n", EncoderC, EncoderB, Color1.reflected);
+		printf("Encoder C: %6d  B: %6d Sensorlinks: %6d\n", EncoderC, EncoderB, Light1.reflected);
 	}
 	
 }
