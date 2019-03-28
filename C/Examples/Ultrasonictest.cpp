@@ -56,12 +56,12 @@ int main(){
 	sensor_light_t Light3;
 	sensor_touch_t Touch4;
 
-	int8_t motorspeed = 100;
+	int8_t motorspeed = 40;
 	int8_t speedLeft = motorspeed;
 	int8_t speedRight = motorspeed;
 	
-	bool sensorLeft = true;
-	bool sensorRight = true;
+	bool sensorLeft = false;
+	bool sensorRight = false;
 	
 	while(true){
 		// Read the encoders
@@ -73,6 +73,17 @@ int main(){
 		BP.get_sensor(PORT_3, &Light3);
 		BP.get_sensor(PORT_4, &Touch4);
 		
+		if(Color1.reflected_red < 400 && Color1.reflected_green < 400 && Color1.reflected_blue < 350){
+			sensorLeft = false;
+		}else{
+			sensorLeft = true;
+		}
+		
+		if(Light3.reflected > 1750 ){
+			sensorRight = false;
+		}else{
+			sensorRight = true;
+		}
 		
 		if(Ultrasonic2.cm < 60){
 			objects(Ultrasonic2.cm);
