@@ -111,7 +111,7 @@ int main(){
 	BP.set_sensor_type(PORT_3, SENSOR_TYPE_NXT_LIGHT_ON);
 	BP.set_sensor_type(PORT_4, SENSOR_TYPE_TOUCH);
 
-	sensor_light_t Color1;//verander dit
+	sensor_light_t Light1;//verander dit
 	sensor_ultrasonic_t Ultrasonic2;
 	sensor_light_t Light3;
 	sensor_touch_t Touch4;
@@ -129,12 +129,12 @@ int main(){
 		int32_t EncoderC = BP.get_motor_encoder(PORT_C);
 		int32_t EncoderB = BP.get_motor_encoder(PORT_B);
 
-		BP.get_sensor(PORT_1, &Color1);
+		BP.get_sensor(PORT_1, &Light1);
 		BP.get_sensor(PORT_2, &Ultrasonic2);
 		BP.get_sensor(PORT_3, &Light3);
 		BP.get_sensor(PORT_4, &Touch4);
 		
-		if(Color1.reflected < 2000){
+		if(Light1.reflected < 2000){
 			sensorLeft = false;
 		}else{
 			sensorLeft = true;
