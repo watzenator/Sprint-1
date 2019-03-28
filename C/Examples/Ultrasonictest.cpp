@@ -16,14 +16,20 @@ void forward(int8_t& speedL, int8_t& speedR, int8_t& motorspeed){
 	speedR = motorspeed;
 }
 
-void left(int8_t& speed, int8_t& motorspeed){
-	BP.set_motor_power(PORT_C, speed--);
-	BP.set_motor_power(PORT_B, motorspeed);
+void right(int8_t& speed, int8_t& motorspeed){
+	if(speed > - 20){
+		speed--;
+	}
+	BP.set_motor_power(PORT_C, speed);
+	BP.set_motor_power(PORT_B, motorspeed+((motorspeed-speed)/5));
 }
 
-void right(int8_t& speed, int8_t& motorspeed){
-	BP.set_motor_power(PORT_C, motorspeed);
-	BP.set_motor_power(PORT_B, speed--);
+void left(int8_t& speed, int8_t& motorspeed){
+	if(speed > - 20){
+		speed--;
+	}
+	BP.set_motor_power(PORT_C, motorspeed+((motorspeed-speed)/5));
+	BP.set_motor_power(PORT_B, speed);
 }
 
 void brake(){
@@ -33,8 +39,8 @@ void brake(){
 
 
 void objects(int getal){
-		BP.set_motor_power(PORT_B, ((getal - 10) * 2));
-		BP.set_motor_power(PORT_C, ((getal - 10) * 2));
+		BP.set_motor_power(PORT_B, ((getal - 50) * 2));
+		BP.set_motor_power(PORT_C, ((getal - 50) * 2));
 }
 
 int main(){
@@ -56,12 +62,13 @@ int main(){
 	sensor_light_t Light3;
 	sensor_touch_t Touch4;
 
-	int8_t motorspeed = 100;
+	int8_t motorspeed = 25;
 	int8_t speedLeft = motorspeed;
 	int8_t speedRight = motorspeed;
 	
-	bool sensorLeft = true;
-	bool sensorRight = true;
+	bool sensorLeft = false;
+	bool sensorRight = false;
+	bool sensorTouch = false;
 	
 	while(true){
 		// Read the encoders
@@ -73,9 +80,28 @@ int main(){
 		BP.get_sensor(PORT_3, &Light3);
 		BP.get_sensor(PORT_4, &Touch4);
 		
+		if(Color1.reflected_red < 500){
+			sensorLeft = false;
+		}else{
+			sensorLeft = true;
+		}
 		
-		if(Ultrasonic2.cm < 60){
-			objects(Ultrasonic2.cm);
+		if(Light3.reflected > 2000 ){
+			sensorRight = false;
+		}else{
+			sensorRight = true;
+		}
+		
+		if(Touch4.pressed == 1){
+			sensorTouch = true;
+		}else{
+			sensorTouch = false;
+		}
+		
+		if(sensorTouch == 1){
+			brake();
+		//}else if(Ultrasonic2.cm < 30){
+		//	objects(Ultrasonic2.cm);
 		}else if(sensorLeft == 1 && sensorRight == 1){
 			forward(speedLeft, speedRight, motorspeed);
 		}else if(sensorLeft == 1 && sensorRight ==0){
@@ -88,7 +114,7 @@ int main(){
 			forward(speedLeft, speedRight, motorspeed);
 		}
 		
-		printf("Encoder C: %6d  B: %6d\n", EncoderC, EncoderB);
+		printf("Encoder C: %6d  B: %6d Red: %6d\n", EncoderC, EncoderB, Color1.reflected_red);
 	}
 	
 }
