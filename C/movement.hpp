@@ -63,21 +63,21 @@ void intersection(const int8_t& motorspeed, sensor_light_t & light1, sensor_ligh
 		sleep(1);
 		BP.set_motor_power(PORT_C, -motorspeed-10);
 		BP.set_motor_power(PORT_B, motorspeed+10);
-		//sleep(1);
+		sleep(1);
 	}else if(choice == '1'){
 		BP.set_motor_power(PORT_C, 15);
 		BP.set_motor_power(PORT_B, 15);
 		sleep(1);
 		BP.set_motor_power(PORT_B, -motorspeed-10);
 		BP.set_motor_power(PORT_C, motorspeed+10);
-		//sleep(1);
+		sleep(1);
 	}else if(choice == '2'){
 		BP.set_motor_power(PORT_C, motorspeed);
 		BP.set_motor_power(PORT_B, motorspeed);
-		//sleep(1);
+		sleep(1);
 	}
-  while( BP.get_sensor(PORT_1, &light1), BP.get_sensor(PORT_3, &light1)){
-  }
+  // while( BP.get_sensor(PORT_1, &light1), BP.get_sensor(PORT_3, &light1)){
+  // }
 }
 
 void objects(const int & distance, const int8_t& motorspeed = 35){
