@@ -13,7 +13,7 @@ BrickPi3 BP;
 
 struct pid{
 	double pBias = 1500, iBias = 2000, dBias = 2000;
-	double pGain = 0.05, iGain = 0.02, dGain = 0.02;
+	double pGain = 0.1, iGain = 0.02, dGain = 0.02;
 	double iState = 0;
 	double iLimit = 0.25, dLimit = 0.25;
 	double iMax = 100, iMin = -100;
@@ -32,7 +32,6 @@ int PIDcontrol(pid & Pid, int setting, sensor_light_t & Light1){
 	
 	//P part
 	int pOutput = (error * Pid.pGain);
-	printf("pOutput: %6d %6d %6d", pOutput, error, Light1.reflected);
 	/*p
 	//I part
 	Pid.iState += error * Pid.iGain;
