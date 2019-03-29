@@ -5,6 +5,7 @@
 
 #define MAX_MOTORPOWER 100
 #define MIN_MOTORPOWER -100
+#define MOTORSPEED 25
 
 using namespace std;
 
@@ -12,7 +13,7 @@ BrickPi3 BP;
 
 struct pid{
 	double pBias = 2000, iBias = 2000, dBias = 2000;
-	double pGain = 0.05, iGain = 0.05, dGain = 0.05;
+	double pGain = 0.02, iGain = 0.02, dGain = 0.02;
 	double iState = 0;
 	double iLimit = 0.25, dLimit = 0.25;
 	double iMax = 100, iMin = -100;
@@ -20,18 +21,19 @@ struct pid{
 	double lastError = 0;
 };
 
-double PIDconfig(pid & Pid){
-	double Pid.iMax = pid.iLimit * MAX_MOTORPOWER / pid.iGain;
-	double Pid.iMin = pid.iLimit * MIN_MOTORPOWER / pid.iGain;
+void PIDconfig(pid & Pid){
+	Pid.iMax = Pid.iLimit * MAX_MOTORPOWER / Pid.iGain;
+	Pid.iMin = Pid.iLimit * MIN_MOTORPOWER / Pid.iGain;
 }
 
-double PIDcontrol(pid & Pid, double & setting){
+double PIDcontrol(pid & Pid, double setting, sensor_light_t & Light1){
 	//making Error
-	double error = BP.get_sensor(PORT_3, &Light3) - setting
+	double error = BP.get_sensor(PORT_3, &Light1) - setting;
 	
 	//P part
 	double pOutput = error * Pid.pGain;
-	
+	printf("pOutput: %6d", pOutput);
+	/*p
 	//I part
 	Pid.iState += error * Pid.iGain;
 	if(Pid.iState > Pid.iMax){
@@ -43,12 +45,12 @@ double PIDcontrol(pid & Pid, double & setting){
 	double iOutput = Pid.iState;
 	
 	//D part
-	double dOutput = (pid.iGain * (error - Pid.last_error));
-	Pid.last_error = error
+	double dOutput = (Pid.iGain * (error - Pid.lastError));
+	Pid.lastError = error;
 	//cat PID 
-	controlValue = pOutput + iOutput + dOutput;
-	
-	return controlValue;
+	double controlValue = pOutput + iOutput + dOutput;
+	*/
+	return pOutput;
 }
 
 bool voltageIsSafe(){
@@ -65,35 +67,7 @@ bool voltageIsSafe(){
 
 void exit_signal_handler(int signo);
 
-void forward(int8_t& speedL, int8_t& speedR, int8_t& motorspeed){
-	BP.set_motor_power(PORT_C, motorspeed);
-	BP.set_motor_power(PORT_B, motorspeed);
-	speedL = motorspeed;
-	speedR = motorspeed;
-}
-
-void right(int8_t& speed, int8_t& motorspeed){
-	if(speed > - 20){
-		speed--;
-	}
-	BP.set_motor_power(PORT_C, speed);
-	BP.set_motor_power(PORT_B, motorspeed+((motorspeed-speed)/5));
-}
-
-void left(int8_t& speed, int8_t& motorspeed){
-	if(speed > - 20){
-		speed--;
-	}
-	BP.set_motor_power(PORT_C, motorspeed+((motorspeed-speed)/5));
-	BP.set_motor_power(PORT_B, speed);
-}
-
-void brake(){
-	BP.set_motor_power(PORT_C, 0);
-	BP.set_motor_power(PORT_B, 0);
-}
-
-void intersection(int8_t& motorspeed, bool& sensorLeft, bool& sensorRight){
+void intersection(bool& sensorLeft, bool& sensorRight){
 	BP.set_motor_power(PORT_C, 0);
 	BP.set_motor_power(PORT_B, 0);
 	printf("Welke kant wil je op: \n");
@@ -103,63 +77,51 @@ void intersection(int8_t& motorspeed, bool& sensorLeft, bool& sensorRight){
 		BP.set_motor_power(PORT_C, 15);
 		BP.set_motor_power(PORT_B, 15);
 		sleep(1);
-		BP.set_motor_power(PORT_C, -motorspeed-10);
-		BP.set_motor_power(PORT_B, motorspeed+10);
+		BP.set_motor_power(PORT_C, -MOTORSPEED-10);
+		BP.set_motor_power(PORT_B, MOTORSPEED+10);
 		sleep(1);
 	}else if(choice == '1'){
 		BP.set_motor_power(PORT_C, 15);
 		BP.set_motor_power(PORT_B, 15);
 		sleep(1);
-		BP.set_motor_power(PORT_B, -motorspeed-10);
-		BP.set_motor_power(PORT_C, motorspeed+10);
+		BP.set_motor_power(PORT_B, -MOTORSPEED-10);
+		BP.set_motor_power(PORT_C, MOTORSPEED+10);
 		sleep(1);
 	}else if(choice == '2'){
-		BP.set_motor_power(PORT_C, motorspeed);
-		BP.set_motor_power(PORT_B, motorspeed);
+		BP.set_motor_power(PORT_C, MOTORSPEED);
+		BP.set_motor_power(PORT_B, MOTORSPEED);
 		sleep(1);
 	}
 }
 
-void objects(int getal, int8_t& motorspeed){
+void objects(int getal){
 		BP.set_motor_power(PORT_B, ((getal - 5) * 2));
 		BP.set_motor_power(PORT_C, ((getal - 5) * 2));
 		if(getal <= 10){
-			BP.set_motor_power(PORT_C, -motorspeed-10);
-			BP.set_motor_power(PORT_B, motorspeed+10);
+			BP.set_motor_power(PORT_C, -MOTORSPEED-10);
+			BP.set_motor_power(PORT_B, MOTORSPEED+10);
 			sleep(1.5);
-			BP.set_motor_power(PORT_C, motorspeed);
-			BP.set_motor_power(PORT_B, motorspeed);
+			BP.set_motor_power(PORT_C, MOTORSPEED);
+			BP.set_motor_power(PORT_B, MOTORSPEED);
 			sleep(4);
-			BP.set_motor_power(PORT_C, motorspeed+10);
-			BP.set_motor_power(PORT_B, -motorspeed-10);
+			BP.set_motor_power(PORT_C, MOTORSPEED+10);
+			BP.set_motor_power(PORT_B, -MOTORSPEED-10);
 			sleep(1.5);
-			BP.set_motor_power(PORT_C, motorspeed);
-			BP.set_motor_power(PORT_B, motorspeed);
+			BP.set_motor_power(PORT_C, MOTORSPEED);
+			BP.set_motor_power(PORT_B, MOTORSPEED);
 			sleep(4);
-			BP.set_motor_power(PORT_C, motorspeed+10);
-			BP.set_motor_power(PORT_B, -motorspeed-10);
+			BP.set_motor_power(PORT_C, MOTORSPEED+10);
+			BP.set_motor_power(PORT_B, -MOTORSPEED-10);
 			sleep(1.5);
-			BP.set_motor_power(PORT_C, motorspeed);
-			BP.set_motor_power(PORT_B, motorspeed);
+			BP.set_motor_power(PORT_C, MOTORSPEED);
+			BP.set_motor_power(PORT_B, MOTORSPEED);
 			sleep(4);
-			BP.set_motor_power(PORT_C, -motorspeed-10);
-			BP.set_motor_power(PORT_B, motorspeed+10);
+			BP.set_motor_power(PORT_C, -MOTORSPEED-10);
+			BP.set_motor_power(PORT_B, MOTORSPEED+10);
 			sleep(1.5);
 		}
 }
 
-
-bool voltageIsSafe(){
-	printf("Battery voltage : %.3f\n", BP.get_voltage_battery());
-  	printf("9v voltage      : %.3f\n", BP.get_voltage_9v());
-  	printf("5v voltage      : %.3f\n", BP.get_voltage_5v());
-  	printf("3.3v voltage    : %.3f\n", BP.get_voltage_3v3());
-
-	if(BP.get_voltage_battery() < 10.9){
-		return false;
-	}
-	return true;
-}
 
 int main(){
 	signal(SIGINT, exit_signal_handler); // register the exit function for Ctrl+C
@@ -167,11 +129,10 @@ int main(){
 	BP.detect(); // Make sure that the BrickPi3 is communicating and that the firmware is compatible with the drivers.
 	
 	if(!voltageIsSafe){
-		cout << "Battery almost empty, exiting program..." << endl;
+		printf("Battery almost empty, exiting program...");
 		BP.reset_all();
 		exit(-5);
 	}
-	
 	
 	// Reset the encoders
 	int32_t EncoderC = BP.offset_motor_encoder(PORT_C, BP.get_motor_encoder(PORT_C));
@@ -188,9 +149,8 @@ int main(){
 	sensor_light_t Light3;
 	sensor_touch_t Touch4;
 
-	int8_t motorspeed = 25;
-	int8_t speedLeft = motorspeed;
-	int8_t speedRight = motorspeed;
+	int8_t speedLeft = MOTORSPEED;
+	int8_t speedRight = MOTORSPEED;
 
 	bool sensorLeft = false;
 	bool sensorRight = false;
@@ -201,7 +161,10 @@ int main(){
 		BP.reset_all();
 		exit(-5);
 	}
+	
 	sleep(2);
+	pid Pid;
+	PIDconfig(Pid);
 	while(true){
 		// Read the encoders
 		int32_t EncoderC = BP.get_motor_encoder(PORT_C);
@@ -211,33 +174,9 @@ int main(){
 		BP.get_sensor(PORT_2, &Ultrasonic2);
 		BP.get_sensor(PORT_3, &Light3);
 		BP.get_sensor(PORT_4, &Touch4);
-
-		if(Light1.reflected > 2000){
-			sensorLeft = false;
-		}else{
-			sensorLeft = true;
-		}
-
-		if(Light3.reflected > 2000 ){
-			sensorRight = false;
-		}else{
-			sensorRight = true;
-		}
-
-		if(Touch4.pressed == 1){
-			brake();
-		}else if(Ultrasonic2.cm < 30){
-			objects(Ultrasonic2.cm, motorspeed);
-		}else if(sensorLeft == 1 && sensorRight ==0){
-			right(speedLeft, motorspeed);
-		}else if(sensorLeft == 0 && sensorRight == 1){
-			left(speedRight, motorspeed);
-		}else if(sensorLeft == 0 && sensorRight == 0){
-			intersection(motorspeed, sensorLeft, sensorRight);
-		}
-		else{
-			forward(speedLeft, speedRight, motorspeed);
-		}
+		double tmp = PIDcontrol(Pid, 2000, Light1);
+		BP.set_motor_power(PORT_C, tmp);
+		BP.set_motor_power(PORT_B, tmp);
 
 		printf("Encoder C: %6d  B: %6d Left: %6d Right: %6d \n", EncoderC, EncoderB, Light3.reflected, Light1.reflected);
 		printf("Ultrasonic sensor (S2): CM %5.1f ", Ultrasonic2.cm);
