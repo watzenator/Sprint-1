@@ -40,7 +40,6 @@ void brake(){
 void intersection(int8_t& motorspeed, bool& sensorLeft, bool& sensorRight){
 	BP.set_motor_power(PORT_C, 0);
 	BP.set_motor_power(PORT_B, 0);
-<<<<<<< HEAD
 	//std::string keuze = "links";
 	printf("Welke kant wil je op: \n");
 	int choice = getchar();
@@ -69,9 +68,32 @@ void intersection(int8_t& motorspeed, bool& sensorLeft, bool& sensorRight){
 	}
 }
 
-void objects(int getal){
-		BP.set_motor_power(PORT_B, ((getal - 50) * 2));
-		BP.set_motor_power(PORT_C, ((getal - 50) * 2));
+void objects(int getal, int8_t& motorspeed){
+		BP.set_motor_power(PORT_B, ((getal - 5) * 2));
+		BP.set_motor_power(PORT_C, ((getal - 5) * 2));
+		if(getal <= 10){
+			BP.set_motor_power(PORT_C, -motorspeed-10);
+			BP.set_motor_power(PORT_B, motorspeed+10);
+			sleep(1.5);
+			BP.set_motor_power(PORT_C, motorspeed);
+			BP.set_motor_power(PORT_B, motorspeed);
+			sleep(4);
+			BP.set_motor_power(PORT_C, motorspeed+10);
+			BP.set_motor_power(PORT_B, -motorspeed-10);
+			sleep(1.5);
+			BP.set_motor_power(PORT_C, motorspeed);
+			BP.set_motor_power(PORT_B, motorspeed);
+			sleep(4);
+			BP.set_motor_power(PORT_C, motorspeed+10);
+			BP.set_motor_power(PORT_B, -motorspeed-10);
+			sleep(1.5);
+			BP.set_motor_power(PORT_C, motorspeed);
+			BP.set_motor_power(PORT_B, motorspeed);
+			sleep(4);
+			BP.set_motor_power(PORT_C, -motorspeed-10);
+			BP.set_motor_power(PORT_B, motorspeed+10);
+			sleep(1.5);
+		}
 }
 
 bool voltageIsSafe(){
@@ -118,7 +140,7 @@ int main(){
 		BP.reset_all();
 		exit(-5);
 	}
-
+	sleep(2);
 	while(true){
 		// Read the encoders
 		int32_t EncoderC = BP.get_motor_encoder(PORT_C);
@@ -143,8 +165,8 @@ int main(){
 
 		if(Touch4.pressed == 1){
 			brake();
-		//}else if(Ultrasonic2.cm < 30){
-		//	objects(Ultrasonic2.cm);
+		}else if(Ultrasonic2.cm < 30){
+			objects(Ultrasonic2.cm, motorspeed);
 		}else if(sensorLeft == 1 && sensorRight ==0){
 			right(speedLeft, motorspeed);
 		}else if(sensorLeft == 0 && sensorRight == 1){
@@ -156,11 +178,8 @@ int main(){
 			forward(speedLeft, speedRight, motorspeed);
 		}
 
-<<<<<<< HEAD
 		printf("Encoder C: %6d  B: %6d Left: %6d Right: %6d \n", EncoderC, EncoderB, Light3.reflected, Light1.reflected);
-=======
-		printf("Encoder C: %6d  B: %6d Red: %6d\n", EncoderC, EncoderB, Color1.reflected);
->>>>>>> 696e4b8d2f6096fd50aa5adb261ea1767bc5099a
+		printf("Ultrasonic sensor (S2): CM %5.1f ", Ultrasonic2.cm);
 	}
 }
 
