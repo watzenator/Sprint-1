@@ -7,6 +7,16 @@
 // #define MAX_MOTORPOWER 100
 // #define MIN_MOTORPOWER -100
 
+// Signal handler that will be called when Ctrl+C is pressed to stop the program
+void exit_signal_handler(int signo){
+	if(signo == SIGINT){
+		BP.reset_all();    // Reset everything so there are no run-away motors
+		exit(-2);
+	}
+}
+
+
+
 int main(){
 
 
@@ -44,6 +54,9 @@ int main(){
 	bool sensorLeft = false;
 	bool sensorRight = false;
 	bool sensorTouch = false;
+
+
+
 
 	if(!voltageIsSafe){
 		printf("Battery almost empty, exiting program...");
@@ -84,21 +97,10 @@ int main(){
 		}else if(sensorLeft == 0 && sensorRight == 1){
 			left(speedRight, manoeuvreSpeed);
 		}else if(sensorLeft == 0 && sensorRight == 0){
-			intersection(manoeuvreSpeed);
+			intersection(manoeuvreSpeed, Light1, Light3);
 		}
 		else{
 			forward(speedLeft, speedRight, basemotorspeed);
 		}
-	}
-}
-
-
-
-
-// Signal handler that will be called when Ctrl+C is pressed to stop the program
-void exit_signal_handler(int signo){
-	if(signo == SIGINT){
-		BP.reset_all();    // Reset everything so there are no run-away motors
-		exit(-2);
 	}
 }

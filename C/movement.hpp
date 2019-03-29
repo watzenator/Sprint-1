@@ -23,14 +23,14 @@ bool voltageIsSafe(){
 }
 
 
-void forward(int8_t& speedL, int8_t& speedR, int8_t& motorspeed){
+void forward(int8_t& speedL, int8_t& speedR, int8_t motorspeed){
 	BP.set_motor_power(PORT_C, motorspeed);
 	BP.set_motor_power(PORT_B, motorspeed);
 	speedL = motorspeed;
 	speedR = motorspeed;
 }
 
-void right(int8_t& speed, int8_t& motorspeed){
+void right(int8_t& speed, int8_t motorspeed){
 	if(speed > - 20){
 		speed--;
 	}
@@ -38,7 +38,7 @@ void right(int8_t& speed, int8_t& motorspeed){
 	BP.set_motor_power(PORT_B, motorspeed+((motorspeed-speed)/5));
 }
 
-void left(int8_t& speed, int8_t& motorspeed){
+void left(int8_t& speed, int8_t motorspeed){
 	if(speed > - 20){
 		speed--;
 	}
@@ -76,7 +76,7 @@ void intersection(const int8_t& motorspeed, sensor_light_t & light1, sensor_ligh
 		BP.set_motor_power(PORT_B, motorspeed);
 		//sleep(1);
 	}
-  while( BP.get_sensor(PORT_1, &Light1), BP.get_sensor(PORT_3, &Light1)){
+  while( BP.get_sensor(PORT_1, &light1), BP.get_sensor(PORT_3, &light1)){
   }
 }
 
