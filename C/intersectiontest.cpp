@@ -40,6 +40,7 @@ void brake(){
 void intersection(int8_t& motorspeed, bool& sensorLeft, bool& sensorRight){
 	BP.set_motor_power(PORT_C, 0);
 	BP.set_motor_power(PORT_B, 0);
+<<<<<<< HEAD
 	//std::string keuze = "links";
 	printf("Welke kant wil je op: \n");
 	int choice = getchar();
@@ -107,7 +108,7 @@ int main(){
 	int8_t motorspeed = 25;
 	int8_t speedLeft = motorspeed;
 	int8_t speedRight = motorspeed;
-	
+
 	bool sensorLeft = false;
 	bool sensorRight = false;
 	bool sensorTouch = false;
@@ -155,7 +156,11 @@ int main(){
 			forward(speedLeft, speedRight, motorspeed);
 		}
 
+<<<<<<< HEAD
 		printf("Encoder C: %6d  B: %6d Left: %6d Right: %6d \n", EncoderC, EncoderB, Light3.reflected, Light1.reflected);
+=======
+		printf("Encoder C: %6d  B: %6d Red: %6d\n", EncoderC, EncoderB, Color1.reflected);
+>>>>>>> 696e4b8d2f6096fd50aa5adb261ea1767bc5099a
 	}
 }
 
