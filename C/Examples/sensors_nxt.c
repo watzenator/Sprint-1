@@ -35,12 +35,12 @@ int main(){
   
   int error;
   
-  BP.set_sensor_type(PORT_1, SENSOR_TYPE_NXT_COLOR_FULL);
+  BP.set_sensor_type(PORT_1, SENSOR_TYPE_NXT_LIGHT_ON);
   BP.set_sensor_type(PORT_2, SENSOR_TYPE_NXT_ULTRASONIC);
   BP.set_sensor_type(PORT_3, SENSOR_TYPE_NXT_LIGHT_ON);
   BP.set_sensor_type(PORT_4, SENSOR_TYPE_TOUCH);
   
-  sensor_color_t      Color1;
+  sensor_light_t      Light1;
   sensor_ultrasonic_t Ultrasonic2;
   sensor_light_t      Light3;
   sensor_touch_t      Touch4;
@@ -48,10 +48,10 @@ int main(){
   while(true){
     error = 0;
     
-    if(BP.get_sensor(PORT_1, &Color1)){
+     if(BP.get_sensor(PORT_1, &Light1)){
       error++;
     }else{
-      printf("Color sensor (S1): detected %d red %4d green %4d blue %4d ambient %4d   ", Color1.color, Color1.reflected_red, Color1.reflected_green, Color1.reflected_blue, Color1.ambient);
+      printf("Light sensor (S1): reflected %4d   ", Light1.reflected);
     }
     
     if(BP.get_sensor(PORT_2, &Ultrasonic2)){
