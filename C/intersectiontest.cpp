@@ -45,49 +45,38 @@ void intersection(int8_t& motorspeed, bool& sensorLeft, bool& sensorRight){
 	cin >> keuze;
 	cout << "\n";
 	if(keuze ==  "links"){
-		while(true){
-			while(sensorRight == 1){
-				BP.set_motor_power(PORT_C, 0);
-				BP.set_motor_power(PORT_B, motorspeed);
-				sleep(1);
-			}while(sensorRight == 0){
-				BP.set_motor_power(PORT_C, 0);
-				BP.set_motor_power(PORT_B, motorspeed);
-				sleep(1);
-			}while(sensorRight == 1){
-				BP.set_motor_power(PORT_C, 0);
-				BP.set_motor_power(PORT_B, motorspeed);
-				sleep(1);
-			}
-			break;
+		while(sensorRight == 0){
+			BP.set_motor_power(PORT_C, 0);
+			BP.set_motor_power(PORT_B, motorspeed);
+			sleep(1);
+		}while(sensorRight == 1){
+			BP.set_motor_power(PORT_C, 0);
+			BP.set_motor_power(PORT_B, motorspeed);
+			sleep(1);
+		}while(sensorRight == 0){
+			BP.set_motor_power(PORT_C, 0);
+			BP.set_motor_power(PORT_B, motorspeed);
+			sleep(1);
 		}
 	}else if(keuze == "rechts"){
-		while(true){
-			while(sensorLeft == 1){
-				BP.set_motor_power(PORT_C, motorspeed);
-				BP.set_motor_power(PORT_B, 0);
-				sleep(1);
-			}while(sensorLeft == 0){
-				BP.set_motor_power(PORT_C, motorspeed);
-				BP.set_motor_power(PORT_B, 0);
-				sleep(1);
-			}while(sensorLeft == 1){
-				BP.set_motor_power(PORT_C, motorspeed);
-				BP.set_motor_power(PORT_B, 0);
-				sleep(1);
-			}
-			break;
+		while(sensorLeft == 0){
+			BP.set_motor_power(PORT_C, motorspeed);
+			BP.set_motor_power(PORT_B, 0);
+			sleep(1);
+		}while(sensorLeft == 1){
+			BP.set_motor_power(PORT_C, motorspeed);
+			BP.set_motor_power(PORT_B, 0);
+			sleep(1);
+		}while(sensorLeft == 0){
+			BP.set_motor_power(PORT_C, motorspeed);
+			BP.set_motor_power(PORT_B, 0);
+			sleep(1);
 		}
 	}else if(keuze == "rechtdoor"){
-		while(true){
-			while(sensorRight == 1 && sensorLeft == 1){
-				BP.set_motor_power(PORT_C, motorspeed);
-				BP.set_motor_power(PORT_B, motorspeed);
-				sleep(1);
-			}
-			if(sensorRight== 0 && sensorLeft == 0){
-				break;
-			}
+		while(sensorRight == 0 && sensorLeft == 0){
+			BP.set_motor_power(PORT_C, motorspeed);
+			BP.set_motor_power(PORT_B, motorspeed);
+			sleep(1);
 		}
 	}
 }
@@ -95,6 +84,18 @@ void intersection(int8_t& motorspeed, bool& sensorLeft, bool& sensorRight){
 void objects(int getal){
 		BP.set_motor_power(PORT_B, ((getal - 50) * 2));
 		BP.set_motor_power(PORT_C, ((getal - 50) * 2));
+}
+
+bool voltageIsSafe(){
+	printf("Battery voltage : %.3f\n", BP.get_voltage_battery());
+  	printf("9v voltage      : %.3f\n", BP.get_voltage_9v());
+  	printf("5v voltage      : %.3f\n", BP.get_voltage_5v());
+  	printf("3.3v voltage    : %.3f\n", BP.get_voltage_3v3());
+
+	if(BP.get_voltage_battery() < 10.9){
+		return false;
+	}
+	return true;
 }
 
 int main(){
@@ -123,7 +124,13 @@ int main(){
 	bool sensorLeft = false;
 	bool sensorRight = false;
 	bool sensorTouch = false;
-	
+
+	if(!voltageIsSafe){
+		cout << "Battery almost empty, exiting program..." << endl;
+		BP.reset_all();
+		exit(-5);
+	}
+
 	while(true){
 		// Read the encoders
 		int32_t EncoderC = BP.get_motor_encoder(PORT_C);
@@ -133,31 +140,23 @@ int main(){
 		BP.get_sensor(PORT_2, &Ultrasonic2);
 		BP.get_sensor(PORT_3, &Light3);
 		BP.get_sensor(PORT_4, &Touch4);
-		
-		if(Light1.reflected < 2000){
+
+		if(Light1.reflected > 2000){
 			sensorLeft = false;
 		}else{
 			sensorLeft = true;
 		}
-		
+
 		if(Light3.reflected > 2000 ){
 			sensorRight = false;
 		}else{
 			sensorRight = true;
 		}
-		
+
 		if(Touch4.pressed == 1){
-			sensorTouch = true;
-		}else{
-			sensorTouch = false;
-		}
-		
-		if(sensorTouch == 1){
 			brake();
 		//}else if(Ultrasonic2.cm < 30){
 		//	objects(Ultrasonic2.cm);
-		}else if(sensorLeft == 1 && sensorRight == 1){
-			forward(speedLeft, speedRight, motorspeed);
 		}else if(sensorLeft == 1 && sensorRight ==0){
 			right(speedLeft, motorspeed);
 		}else if(sensorLeft == 0 && sensorRight == 1){
@@ -167,10 +166,9 @@ int main(){
 		}else{
 			forward(speedLeft, speedRight, motorspeed);
 		}
-		
-		printf("Encoder C: %6d  B: %6d Sensorlinks: %6d\n", EncoderC, EncoderB, Light1.reflected);
+
+		printf("Encoder C: %6d  B: %6d Red: %6d\n", EncoderC, EncoderB, Color1.reflected);
 	}
-	
 }
 
 // Signal handler that will be called when Ctrl+C is pressed to stop the program
