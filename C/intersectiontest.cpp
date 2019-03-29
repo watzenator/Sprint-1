@@ -13,7 +13,7 @@ BrickPi3 BP;
 
 struct pid{
 	double pBias = 1500, iBias = 2000, dBias = 2000;
-	double pGain = 0.5, iGain = 0.02, dGain = 0.02;
+	double pGain = 0.05, iGain = 0.02, dGain = 0.02;
 	double iState = 0;
 	double iLimit = 0.25, dLimit = 0.25;
 	double iMax = 100, iMin = -100;
@@ -26,12 +26,12 @@ void PIDconfig(pid & Pid){
 	Pid.iMin = Pid.iLimit * MIN_MOTORPOWER / Pid.iGain;
 }
 
-double PIDcontrol(pid & Pid, double setting, sensor_light_t & Light1){
+int PIDcontrol(pid & Pid, int setting, sensor_light_t & Light1){
 	//making Error
-	double error = setting - Light1.reflected ;
+	int error = setting - Light1.reflected ;
 	
 	//P part
-	double pOutput = error * Pid.pGain;
+	int pOutput = (error * Pid.pGain);
 	printf("pOutput: %6d %6d %6d", pOutput, error, Light1.reflected);
 	/*p
 	//I part
@@ -174,9 +174,9 @@ int main(){
 		BP.get_sensor(PORT_2, &Ultrasonic2);
 		BP.get_sensor(PORT_3, &Light3);
 		BP.get_sensor(PORT_4, &Touch4);
-		double tmp = PIDcontrol(Pid, 2000, Light1);
-		BP.set_motor_power(PORT_C, tmp);
-		BP.set_motor_power(PORT_B, tmp);
+		int controlValue = PIDcontrol(Pid, 2000, Light1);
+		BP.set_motor_power(PORT_C, controlValue+20);
+		BP.set_motor_power(PORT_B, -controlValue+20);
 
 		printf("Encoder C: %6d  B: %6d Left: %6d Right: %6d \n", EncoderC, EncoderB, Light3.reflected, Light1.reflected);
 		printf("Ultrasonic sensor (S2): CM %5.1f ", Ultrasonic2.cm);
