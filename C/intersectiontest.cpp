@@ -1,14 +1,14 @@
 #include "BrickPi3.cpp" // for BrickPi3
+#include "movement.hpp"
 #include <stdio.h>      // for printf
 #include <unistd.h>     // for usleep
 #include <signal.h>     // for catching exit signals
 #include <iostream>
-#define MAX_MOTORPOWER 100
-#define MIN_MOTORPOWER -100
-
-using namespace std;
+// #define MAX_MOTORPOWER 100
+// #define MIN_MOTORPOWER -100
 
 BrickPi3 BP;
+<<<<<<< HEAD
 /*
 struct pid{
 	double pBias = 2000, iBias = 2000, dBias = 2000;
@@ -122,52 +122,27 @@ void intersection(const int8_t& motorspeed, bool& sensorLeft, bool& sensorRight)
 	}
 	sleep(1);
 }
-
-void objects(int getal,const int8_t& motorspeed = 25){
-		BP.set_motor_power(PORT_B, ((getal - 5) * 2));
-		BP.set_motor_power(PORT_C, ((getal - 5) * 2));
-		if(getal <= 10){
-			BP.set_motor_power(PORT_C, -motorspeed-10);
-			BP.set_motor_power(PORT_B, motorspeed+10);
-			sleep(1.9);
-			BP.set_motor_power(PORT_C, motorspeed);
-			BP.set_motor_power(PORT_B, motorspeed);
-			sleep(3);
-			BP.set_motor_power(PORT_C, motorspeed+10);
-			BP.set_motor_power(PORT_B, -motorspeed-10);
-			sleep(1.9);
-			BP.set_motor_power(PORT_C, motorspeed);
-			BP.set_motor_power(PORT_B, motorspeed);
-			sleep(5);
-			BP.set_motor_power(PORT_C, motorspeed+10);
-			BP.set_motor_power(PORT_B, -motorspeed-10);
-			sleep(1.9);
-			BP.set_motor_power(PORT_C, motorspeed);
-			BP.set_motor_power(PORT_B, motorspeed);
-			sleep(3);
-			BP.set_motor_power(PORT_C, -motorspeed-10);
-			BP.set_motor_power(PORT_B, motorspeed+10);
-			sleep(1.9);
-		}
-}
-
+=======
+>>>>>>> 0381f1edd09206bd853354e9881dec7fb382c5d4
 
 int main(){
+
+
 	signal(SIGINT, exit_signal_handler); // register the exit function for Ctrl+C
- 
+
 	BP.detect(); // Make sure that the BrickPi3 is communicating and that the firmware is compatible with the drivers.
-	
+
 	if(!voltageIsSafe){
 		//cout << "Battery almost empty, exiting program..." << endl;
 		BP.reset_all();
 		exit(-5);
 	}
-	
-	
+
+
 	// Reset the encoders
 	int32_t EncoderC = BP.offset_motor_encoder(PORT_C, BP.get_motor_encoder(PORT_C));
 	int32_t EncoderB = BP.offset_motor_encoder(PORT_B, BP.get_motor_encoder(PORT_B));
-	
+
 	BP.set_sensor_type(PORT_1, SENSOR_TYPE_NXT_LIGHT_ON);
 	BP.set_sensor_type(PORT_2, SENSOR_TYPE_NXT_ULTRASONIC);
 	BP.set_sensor_type(PORT_3, SENSOR_TYPE_NXT_LIGHT_ON);
@@ -179,7 +154,8 @@ int main(){
 	sensor_light_t Light3;
 	sensor_touch_t Touch4;
 
-	int8_t motorspeed = 50;
+	const int8_t manoeuvreSpeed = 25;
+	const int8_t basemotorspeed = 50;
 	int8_t speedLeft = motorspeed;
 	int8_t speedRight = motorspeed;
 
@@ -192,7 +168,7 @@ int main(){
 		BP.reset_all();
 		exit(-5);
 	}
-	//BP.get_sensor(PORT2, &Ultrasonic2);
+
 	sleep(2);
 	while(true){
 		// Read the encoders
@@ -220,23 +196,33 @@ int main(){
 			BP.reset_all();
 			exit(-2);
 		//}else if(Ultrasonic2.cm < 30){
-		//	objects(Ultrasonic2.cm);
+		//	objects(Ultrasonic2.cm, manoeuvreSpeed);
 		}else if(sensorLeft == 1 && sensorRight ==0){
 			right(speedLeft, motorspeed);
 		}else if(sensorLeft == 0 && sensorRight == 1){
 			left(speedRight, motorspeed);
 		}else if(sensorLeft == 0 && sensorRight == 0){
-			intersection(25, sensorLeft, sensorRight);
+			intersection(manoeuvreSpeed, sensorLeft, sensorRight);
 		}
 		else{
 			forward(speedLeft, speedRight, motorspeed);
 		}
-
-		//printf("Encoder C: %6d  B: %6d Left: %6d Right: %6d \n", EncoderC, EncoderB, Light3.reflected, Light1.reflected);
-		//printf("Ultrasonic sensor (S2): CM %5.1f\n ", Ultrasonic2.cm);
-		//cout << "Ultrasonic: " << Ultrasonic2.cm << endl;
 	}
 }
+
+//Checks the Batttery.
+bool voltageIsSafe(){
+	printf("Battery voltage : %.3f\n", BP.get_voltage_battery());
+  	printf("9v voltage      : %.3f\n", BP.get_voltage_9v());
+  	printf("5v voltage      : %.3f\n", BP.get_voltage_5v());
+  	printf("3.3v voltage    : %.3f\n", BP.get_voltage_3v3());
+
+	if(BP.get_voltage_battery() < 10.9){
+		return false;
+	}
+	return true;
+}
+
 
 // Signal handler that will be called when Ctrl+C is pressed to stop the program
 void exit_signal_handler(int signo){
