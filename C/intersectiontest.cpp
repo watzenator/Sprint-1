@@ -40,8 +40,8 @@ int main(){
 
 	const int8_t manoeuvreSpeed = 25;
 	const int8_t basemotorspeed = 50;
-	int8_t speedLeft = motorspeed;
-	int8_t speedRight = motorspeed;
+	int8_t speedLeft = basemotorspeed;
+	int8_t speedRight = basemotorspeed;
 
 	bool sensorLeft = false;
 	bool sensorRight = false;
@@ -82,30 +82,19 @@ int main(){
 		//}else if(Ultrasonic2.cm < 30){
 		//	objects(Ultrasonic2.cm, manoeuvreSpeed);
 		}else if(sensorLeft == 1 && sensorRight ==0){
-			right(speedLeft, motorspeed);
+			right(speedLeft, manoeuvreSpeed);
 		}else if(sensorLeft == 0 && sensorRight == 1){
-			left(speedRight, motorspeed);
+			left(speedRight, manoeuvreSpeed);
 		}else if(sensorLeft == 0 && sensorRight == 0){
-			intersection(manoeuvreSpeed, sensorLeft, sensorRight);
+			intersection(manoeuvreSpeed);
 		}
 		else{
-			forward(speedLeft, speedRight, motorspeed);
+			forward(speedLeft, speedRight, basemotorspeed);
 		}
 	}
 }
 
-//Checks the Batttery.
-bool voltageIsSafe(){
-	printf("Battery voltage : %.3f\n", BP.get_voltage_battery());
-  	printf("9v voltage      : %.3f\n", BP.get_voltage_9v());
-  	printf("5v voltage      : %.3f\n", BP.get_voltage_5v());
-  	printf("3.3v voltage    : %.3f\n", BP.get_voltage_3v3());
 
-	if(BP.get_voltage_battery() < 10.9){
-		return false;
-	}
-	return true;
-}
 
 
 // Signal handler that will be called when Ctrl+C is pressed to stop the program

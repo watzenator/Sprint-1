@@ -7,6 +7,20 @@
 #include <signal.h>     // for catching exit signals
 #include <iostream>
 
+//Checks the Batttery.
+bool voltageIsSafe(){
+	printf("Battery voltage : %.3f\n", BP.get_voltage_battery());
+  	printf("9v voltage      : %.3f\n", BP.get_voltage_9v());
+  	printf("5v voltage      : %.3f\n", BP.get_voltage_5v());
+  	printf("3.3v voltage    : %.3f\n", BP.get_voltage_3v3());
+
+	if(BP.get_voltage_battery() < 10.9){
+		return false;
+	}
+	return true;
+}
+
+
 void forward(int8_t& speedL, int8_t& speedR, int8_t& motorspeed){
 	BP.set_motor_power(PORT_C, motorspeed);
 	BP.set_motor_power(PORT_B, motorspeed);
@@ -61,7 +75,6 @@ void intersection(const int8_t& motorspeed, sensor_light_t & light1, sensor_ligh
 		//sleep(1);
 	}
   while( BP.get_sensor(PORT_1, &Light1), BP.get_sensor(PORT_3, &Light1)){
-    (void);
   }
 }
 
