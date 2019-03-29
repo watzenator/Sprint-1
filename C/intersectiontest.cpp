@@ -12,7 +12,7 @@ using namespace std;
 BrickPi3 BP;
 
 struct pid{
-	double pBias = 2000, iBias = 2000, dBias = 2000;
+	double pBias = 1500, iBias = 2000, dBias = 2000;
 	double pGain = 0.02, iGain = 0.02, dGain = 0.02;
 	double iState = 0;
 	double iLimit = 0.25, dLimit = 0.25;
@@ -28,7 +28,7 @@ void PIDconfig(pid & Pid){
 
 double PIDcontrol(pid & Pid, double setting, sensor_light_t & Light1){
 	//making Error
-	double error = Light1.reflected - setting;
+	double error = setting - Light1.reflected ;
 	
 	//P part
 	double pOutput = error * Pid.pGain;
