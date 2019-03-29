@@ -1,4 +1,4 @@
-#include "BrickPi3.cpp" // for BrickPi3
+ // for BrickPi3
 #include "movement.hpp"
 #include <stdio.h>      // for printf
 #include <unistd.h>     // for usleep
@@ -6,8 +6,6 @@
 #include <iostream>
 // #define MAX_MOTORPOWER 100
 // #define MIN_MOTORPOWER -100
-
-BrickPi3 BP;
 
 int main(){
 

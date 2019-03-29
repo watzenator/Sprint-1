@@ -7,6 +7,8 @@
 #include <signal.h>     // for catching exit signals
 #include <iostream>
 
+BrickPi3 BP;
+
 //Checks the Batttery.
 bool voltageIsSafe(){
 	printf("Battery voltage : %.3f\n", BP.get_voltage_battery());
