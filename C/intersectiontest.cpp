@@ -32,7 +32,7 @@ double PIDcontrol(pid & Pid, double setting, sensor_light_t & Light1){
 	
 	//P part
 	double pOutput = error * Pid.pGain;
-	printf("pOutput: %6d %6d %6d", pOutput, error, Light.reflected);
+	printf("pOutput: %6d %6d %6d", pOutput, error, Light1.reflected);
 	/*p
 	//I part
 	Pid.iState += error * Pid.iGain;
