@@ -45,14 +45,11 @@ void intersection(int8_t& motorspeed, bool& sensorLeft, bool& sensorRight){
 	int choice = getchar();
 
 	if(choice == '0'){
-		BP.set_motor_power(PORT_C, 0);
-		BP.set_motor_power(PORT_B, motorspeed);
+		BP.set_motor_power(PORT_C, 15);
+		BP.set_motor_power(PORT_B, 15);
 		sleep(1);
-		BP.set_motor_power(PORT_C, 0);
-		BP.set_motor_power(PORT_B, motorspeed);
-		sleep(1);
-		BP.set_motor_power(PORT_C, 0);
-		BP.set_motor_power(PORT_B, motorspeed);
+		BP.set_motor_power(PORT_C, -motorspeed-10);
+		BP.set_motor_power(PORT_B, motorspeed+10);
 		sleep(1);
 	}else if(choice == '1'){
 		BP.set_motor_power(PORT_C, motorspeed);
