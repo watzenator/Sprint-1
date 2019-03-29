@@ -28,7 +28,7 @@ void PIDconfig(pid & Pid){
 
 double PIDcontrol(pid & Pid, double setting, sensor_light_t & Light1){
 	//making Error
-	double error = BP.get_sensor(PORT_3, &Light1) - setting;
+	double error = Light1.reflected - setting;
 	
 	//P part
 	double pOutput = error * Pid.pGain;
