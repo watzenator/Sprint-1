@@ -2,14 +2,14 @@
 #include <stdio.h>      // for printf
 #include <unistd.h>     // for usleep
 #include <signal.h>     // for catching exit signals
-
+#include <iostream>
 #define MAX_MOTORPOWER 100
 #define MIN_MOTORPOWER -100
 
 using namespace std;
 
 BrickPi3 BP;
-
+/*
 struct pid{
 	double pBias = 2000, iBias = 2000, dBias = 2000;
 	double pGain = 0.05, iGain = 0.05, dGain = 0.05;
@@ -25,7 +25,8 @@ double PIDconfig(pid & Pid){
 	double Pid.iMin = pid.iLimit * MIN_MOTORPOWER / pid.iGain;
 }
 
-double PIDcontrol(pid & Pid, double & setting){
+double PIDcontrol(pid & Pid, double & setting, ){
+	/*
 	//making Error
 	double error = BP.get_sensor(PORT_3, &Light3) - setting
 	
@@ -43,14 +44,15 @@ double PIDcontrol(pid & Pid, double & setting){
 	double iOutput = Pid.iState;
 	
 	//D part
-	double dOutput = (pid.iGain * (error - Pid.last_error));
+	double dOutput = (Pid.iGain * (error - Pid.last_error));
 	Pid.last_error = error
 	//cat PID 
 	controlValue = pOutput + iOutput + dOutput;
 	
 	return controlValue;
+	
 }
-
+*/
 bool voltageIsSafe(){
 	printf("Battery voltage : %.3f\n", BP.get_voltage_battery());
   	printf("9v voltage      : %.3f\n", BP.get_voltage_9v());
@@ -93,7 +95,7 @@ void brake(){
 	BP.set_motor_power(PORT_B, 0);
 }
 
-void intersection(int8_t& motorspeed, bool& sensorLeft, bool& sensorRight){
+void intersection(const int8_t& motorspeed, bool& sensorLeft, bool& sensorRight){
 	BP.set_motor_power(PORT_C, 0);
 	BP.set_motor_power(PORT_B, 0);
 	printf("Welke kant wil je op: \n");
@@ -120,46 +122,34 @@ void intersection(int8_t& motorspeed, bool& sensorLeft, bool& sensorRight){
 	}
 }
 
-void objects(int getal, int8_t& motorspeed){
+void objects(int getal,const int8_t& motorspeed = 25){
 		BP.set_motor_power(PORT_B, ((getal - 5) * 2));
 		BP.set_motor_power(PORT_C, ((getal - 5) * 2));
 		if(getal <= 10){
 			BP.set_motor_power(PORT_C, -motorspeed-10);
 			BP.set_motor_power(PORT_B, motorspeed+10);
-			sleep(1.5);
+			sleep(1.9);
 			BP.set_motor_power(PORT_C, motorspeed);
 			BP.set_motor_power(PORT_B, motorspeed);
-			sleep(4);
+			sleep(3);
 			BP.set_motor_power(PORT_C, motorspeed+10);
 			BP.set_motor_power(PORT_B, -motorspeed-10);
-			sleep(1.5);
+			sleep(1.9);
 			BP.set_motor_power(PORT_C, motorspeed);
 			BP.set_motor_power(PORT_B, motorspeed);
-			sleep(4);
+			sleep(5);
 			BP.set_motor_power(PORT_C, motorspeed+10);
 			BP.set_motor_power(PORT_B, -motorspeed-10);
-			sleep(1.5);
+			sleep(1.9);
 			BP.set_motor_power(PORT_C, motorspeed);
 			BP.set_motor_power(PORT_B, motorspeed);
-			sleep(4);
+			sleep(3);
 			BP.set_motor_power(PORT_C, -motorspeed-10);
 			BP.set_motor_power(PORT_B, motorspeed+10);
-			sleep(1.5);
+			sleep(1.9);
 		}
 }
 
-
-bool voltageIsSafe(){
-	printf("Battery voltage : %.3f\n", BP.get_voltage_battery());
-  	printf("9v voltage      : %.3f\n", BP.get_voltage_9v());
-  	printf("5v voltage      : %.3f\n", BP.get_voltage_5v());
-  	printf("3.3v voltage    : %.3f\n", BP.get_voltage_3v3());
-
-	if(BP.get_voltage_battery() < 10.9){
-		return false;
-	}
-	return true;
-}
 
 int main(){
 	signal(SIGINT, exit_signal_handler); // register the exit function for Ctrl+C
@@ -167,7 +157,7 @@ int main(){
 	BP.detect(); // Make sure that the BrickPi3 is communicating and that the firmware is compatible with the drivers.
 	
 	if(!voltageIsSafe){
-		cout << "Battery almost empty, exiting program..." << endl;
+		//cout << "Battery almost empty, exiting program..." << endl;
 		BP.reset_all();
 		exit(-5);
 	}
@@ -188,7 +178,7 @@ int main(){
 	sensor_light_t Light3;
 	sensor_touch_t Touch4;
 
-	int8_t motorspeed = 25;
+	int8_t motorspeed = 50;
 	int8_t speedLeft = motorspeed;
 	int8_t speedRight = motorspeed;
 
@@ -201,11 +191,12 @@ int main(){
 		BP.reset_all();
 		exit(-5);
 	}
+	//BP.get_sensor(PORT2, &Ultrasonic2);
 	sleep(2);
 	while(true){
 		// Read the encoders
-		int32_t EncoderC = BP.get_motor_encoder(PORT_C);
-		int32_t EncoderB = BP.get_motor_encoder(PORT_B);
+		//int32_t EncoderC = BP.get_motor_encoder(PORT_C);
+		//int32_t EncoderB = BP.get_motor_encoder(PORT_B);
 
 		BP.get_sensor(PORT_1, &Light1);
 		BP.get_sensor(PORT_2, &Ultrasonic2);
@@ -225,22 +216,24 @@ int main(){
 		}
 
 		if(Touch4.pressed == 1){
-			brake();
-		}else if(Ultrasonic2.cm < 30){
-			objects(Ultrasonic2.cm, motorspeed);
+			BP.reset_all();
+			exit(-2);
+		//}else if(Ultrasonic2.cm < 30){
+		//	objects(Ultrasonic2.cm);
 		}else if(sensorLeft == 1 && sensorRight ==0){
 			right(speedLeft, motorspeed);
 		}else if(sensorLeft == 0 && sensorRight == 1){
 			left(speedRight, motorspeed);
 		}else if(sensorLeft == 0 && sensorRight == 0){
-			intersection(motorspeed, sensorLeft, sensorRight);
+			intersection(25, sensorLeft, sensorRight);
 		}
 		else{
 			forward(speedLeft, speedRight, motorspeed);
 		}
 
-		printf("Encoder C: %6d  B: %6d Left: %6d Right: %6d \n", EncoderC, EncoderB, Light3.reflected, Light1.reflected);
-		printf("Ultrasonic sensor (S2): CM %5.1f ", Ultrasonic2.cm);
+		//printf("Encoder C: %6d  B: %6d Left: %6d Right: %6d \n", EncoderC, EncoderB, Light3.reflected, Light1.reflected);
+		//printf("Ultrasonic sensor (S2): CM %5.1f\n ", Ultrasonic2.cm);
+		//cout << "Ultrasonic: " << Ultrasonic2.cm << endl;
 	}
 }
 
