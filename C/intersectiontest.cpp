@@ -107,19 +107,20 @@ void intersection(const int8_t& motorspeed, bool& sensorLeft, bool& sensorRight)
 		sleep(1);
 		BP.set_motor_power(PORT_C, -motorspeed-10);
 		BP.set_motor_power(PORT_B, motorspeed+10);
-		sleep(1);
+		//sleep(1);
 	}else if(choice == '1'){
 		BP.set_motor_power(PORT_C, 15);
 		BP.set_motor_power(PORT_B, 15);
 		sleep(1);
 		BP.set_motor_power(PORT_B, -motorspeed-10);
 		BP.set_motor_power(PORT_C, motorspeed+10);
-		sleep(1);
+		//sleep(1);
 	}else if(choice == '2'){
 		BP.set_motor_power(PORT_C, motorspeed);
 		BP.set_motor_power(PORT_B, motorspeed);
-		sleep(1);
+		//sleep(1);
 	}
+	sleep(1);
 }
 
 void objects(int getal,const int8_t& motorspeed = 25){
