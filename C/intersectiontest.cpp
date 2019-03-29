@@ -12,34 +12,45 @@ using namespace std;
 BrickPi3 BP;
 
 struct pid{
-	double pBias = 0, iBias = 0, dBias = 0;
-	double pGain = 1, iGain = 1, dGain = 1;
-	double iState = 0, dState = 0;
+	double pBias = 2000, iBias = 2000, dBias = 2000;
+	double pGain = 0.05, iGain = 0.05, dGain = 0.05;
+	double iState = 0;
 	double iLimit = 0.25, dLimit = 0.25;
 	double iMax = 100, iMin = -100;
-}
+	double dMax = 100, dMin = -100;
+	double lastError = 0;
+};
 
 double PIDconfig(pid & Pid){
 	double Pid.iMax = pid.iLimit * MAX_MOTORPOWER / pid.iGain;
 	double Pid.iMin = pid.iLimit * MIN_MOTORPOWER / pid.iGain;
 }
 
-double PIDcontrol(pid & Pid, double setting, double error){
+double PIDcontrol(pid & Pid, double & setting){
+	//making Error
+	double error = BP.get_sensor(PORT_3, &Light3) - setting
+	
 	//P part
-	double pOutput = (error + Pid.pBias) * Pid.pGain;
+	double pOutput = error * Pid.pGain;
 	
 	//I part
-	Pid.iState += (error + Pid.iBias);
+	Pid.iState += error * Pid.iGain;
 	if(Pid.iState > Pid.iMax){
 		Pid.iState = Pid.iMax;
 	}
 	else if(Pid.iState < Pid.iMin){
 		Pid.iState = Pid.iMin;
 	}
-	double iOutput = Pid.iState * Pid.iGain;
+	double iOutput = Pid.iState;
 	
 	//D part
-	double dOutput = ;
+	double dOutput = (pid.iGain * (error - Pid.last_error));
+	Pid.last_error = error
+	//cat PID 
+	controlValue = pOutput + iOutput + dOutput;
+	
+	return controlValue;
+
 }
 
 
@@ -155,12 +166,12 @@ int main(){
 	int32_t EncoderC = BP.offset_motor_encoder(PORT_C, BP.get_motor_encoder(PORT_C));
 	int32_t EncoderB = BP.offset_motor_encoder(PORT_B, BP.get_motor_encoder(PORT_B));
 	
-	BP.set_sensor_type(PORT_1, SENSOR_TYPE_NXT_COLOR_FULL);
+	BP.set_sensor_type(PORT_1, SENSOR_TYPE_NXT_LIGHT_ON);
 	BP.set_sensor_type(PORT_2, SENSOR_TYPE_NXT_ULTRASONIC);
 	BP.set_sensor_type(PORT_3, SENSOR_TYPE_NXT_LIGHT_ON);
 	BP.set_sensor_type(PORT_4, SENSOR_TYPE_TOUCH);
 
-	sensor_color_t Color1;
+	sensor_color_t Light1;
 	sensor_ultrasonic_t Ultrasonic2;
 	sensor_light_t Light3;
 	sensor_touch_t Touch4;
@@ -178,12 +189,12 @@ int main(){
 		int32_t EncoderC = BP.get_motor_encoder(PORT_C);
 		int32_t EncoderB = BP.get_motor_encoder(PORT_B);
 
-		BP.get_sensor(PORT_1, &Color1);
+		BP.get_sensor(PORT_1, &Light1);
 		BP.get_sensor(PORT_2, &Ultrasonic2);
 		BP.get_sensor(PORT_3, &Light3);
 		BP.get_sensor(PORT_4, &Touch4);
 		
-		if(Color1.reflected_red < 500){
+		if(Light1.reflected > 2000){
 			sensorLeft = false;
 		}else{
 			sensorLeft = true;
