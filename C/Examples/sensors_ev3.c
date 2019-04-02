@@ -37,13 +37,12 @@ int main(){
   
   BP.set_sensor_type(PORT_1, SENSOR_TYPE_EV3_COLOR_COLOR_COMPONENTS);
   BP.set_sensor_type(PORT_2, SENSOR_TYPE_EV3_ULTRASONIC_CM);
-  BP.set_sensor_type(PORT_3, SENSOR_TYPE_EV3_GYRO_ABS_DPS);
-  BP.set_sensor_type(PORT_4, SENSOR_TYPE_EV3_INFRARED_REMOTE);
+  BP.set_sensor_type(PORT_4, SENSOR_TYPE_EV3_GYRO_ABS_DPS);
+ 
   
   sensor_color_t      Color1;
   sensor_ultrasonic_t Ultrasonic2;
-  sensor_gyro_t       Gyro3;
-  sensor_infrared_t   Infrared4;
+  sensor_gyro_t       Gyro4;
   
   while(true){
     error = 0;
@@ -60,19 +59,14 @@ int main(){
       printf("Ultrasonic sensor (S2): CM %5.1f Inches %5.1f   ", Ultrasonic2.cm, Ultrasonic2.inch);
     }
     
-    if(BP.get_sensor(PORT_3, &Gyro3)){
+    if(BP.get_sensor(PORT_4, &Gyro4)){
       error++;
     }else{
-      printf("Gyro sensor (S3): absolute %5d degrees per second %4d   ", Gyro3.abs, Gyro3.dps);
+      printf("Gyro sensor (S3): absolute %5d degrees per second %4d   ", Gyro4.abs, Gyro4.dps);
     }
     
-    if(BP.get_sensor(PORT_4, &Infrared4)){
-      error++;
-    }else{
-      printf("Infrared sensor (S4): channel 1 %02X channel 2 %02X channel 3 %02X channel 4 %02X   ", Infrared4.remote[0], Infrared4.remote[1], Infrared4.remote[2], Infrared4.remote[3]);
-    }
     
-    if(error == 4){
+    if(error == 3){
       printf("Waiting for sensors to be configured");
     }
     
